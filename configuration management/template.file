@@ -4,6 +4,6 @@ capacitor_type flux
 # Replace this
 widget_type X
 # ... with this:
-# Widget type (output from facter -p widget)
+# widget_type (output from facter -p widget)
 model delorean
 avoid shopping_mall_parking_lots
