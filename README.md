@@ -1,7 +1,7 @@
 automation-challenges
 =====================
 
-Coding challenges for the Vocalocity Automation Team
+Coding challenges for the VBS Automation Team
 
 Instructions
 ============
