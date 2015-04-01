@@ -8,15 +8,27 @@ In this directory is a file, "template.file". This file needs to be distributed 
     # ... with this:
     # widget_type (output from facter -p widget)
 
-In whatever language you like, as simply or as complicated as you like, write a solution that will:
+The included solution for deploying this file assumes the following:
+* All target systems are managed by puppet, at least v2.7
+* Infrastructure for puppet already exists
+* Puppet generally works correctly on these systems
+* Puppet is being invoked on demand, not running as a daemon
+* The custom fact for "widget" already exists on all target systems
+* The original requirement unintentionally requested a commented-out widget_type line
+
+Included in the "widget" subdirectory is a simple puppet manifest that includes a single class "widget". This class accepts a parameter to specify the location of the output file, with a default value of /etc/widgetfile, and uses the value of the top-level variable "widget" as supplied by facter for later subsitution into a ruby template that populates this file.
+
+Additionally, there is a shell script named "run.sh", which will:
 
 * Across N number of linux systems (where N is a number from 0-positive infinity):
- * Place the template file on the system in /etc/widgetfile with the appropriate portions of the file replaced with the actual widget value
+ * Run puppet to place the template file on the system in /etc/widgetfile with the appropriate portions of the file replaced with the actual widget value
 * Reports the number of systems from N that were successfully templated
 * Reports the number of systems from N that failed to template
 
-You can assume total control over the access model on the systems - e.g., if you want to place the file with direct SSH, that's fine. If you want the file to be retrieved from a HTTP or other service by a daemon running on each system, that's fine. Document/code that in your solution.
+This shell script assumes the following:
+* It is being executed by a user that has ssh access to all remote systems as the root user using public key authentication
+* There exists some shell command that will generate a list of all desired target systems
+* The included puppet module has already been deployed to the target environment(s)
 
-Provide full documentation and example usage for how you would deploy this solution.
+In addition to reporting success or failure of the puppet run, it invokes a validation step that directly examines the widget file for appropriate content.
 
-If you do not have access to multiple systems or virtualization to test this solution (we recommend Vagrant and Virtualbox if you don't have access to anything else), we will accept an untested solution with good documentation that explains the methodology behind the tool. Your method and approach are more at issue here than your implementation.
